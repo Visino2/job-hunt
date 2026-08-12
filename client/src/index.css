@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Design tokens — light only, no dark mode (app has never had one, and
+   none was requested). Named role tokens (canvas/surface/well/line/fg)
+   for neutrals so component code reads semantically; numeric 50-800
+   scales for the accent/semantic hues since those need multiple shades. */
+@theme {
+  /* Canvas is deliberately a step darker than the old #f7f8fa — that was
+     so close to white the surface cards barely lifted off the page. This
+     reads as a considered cool-gray ground, not a blank browser default. */
+  --color-canvas: #eceff4;
+  --color-surface: #ffffff;
+  --color-well: #f1f3f6;
+  --color-line: #e4e7ec;
+  --color-line-strong: #c7ccd6;
+
+  --color-fg: #1b2130;
+  --color-fg-muted: #4b5468;
+  --color-fg-subtle: #8b93a1;
+
+  /* Ink — primary accent. Used sparingly: primary buttons, active nav,
+     links, "Applied" status. */
+  --color-ink-50: #eef2f8;
+  --color-ink-100: #dce5f0;
+  --color-ink-500: #35548a;
+  --color-ink-600: #2b4570;
+  --color-ink-700: #223655;
+  --color-ink-800: #1a2942;
+
+  /* Plum — secondary accent, scoped to exactly two meanings:
+     "Interviewing" status and Behavioral question type. */
+  --color-plum-50: #f5eff4;
+  --color-plum-100: #ebe0e9;
+  --color-plum-600: #6d4c6b;
+  --color-plum-700: #573d56;
+
+  /* Forest — success: high match score, "Offer" status, strong feedback. */
+  --color-forest-50: #eef5f0;
+  --color-forest-100: #dcebe1;
+  --color-forest-600: #3f7554;
+  --color-forest-700: #335f44;
+
+  /* Ochre — caution: medium match score, vague/weak feedback. */
+  --color-ochre-50: #fbf3e7;
+  --color-ochre-100: #f5e5cc;
+  --color-ochre-600: #b7791f;
+  --color-ochre-700: #966319;
+
+  /* Brick — error/negative: low match score, "Rejected" status, red
+     flags (explicit rejection-criteria conflicts), form errors. */
+  --color-brick-50: #fbefee;
+  --color-brick-100: #f5dbd9;
+  --color-brick-600: #b3433d;
+  --color-brick-700: #963530;
+
+  /* One elevation treatment app-wide: hairline border + this soft
+     shadow, on every card, never shadow-only or border-only. Strong
+     enough to actually read as "lifted" against the canvas, not just a
+     border with a barely-there haze. */
+  --shadow-sm: 0 1px 3px rgba(27, 33, 48, 0.08), 0 1px 2px rgba(27, 33, 48, 0.05);
+  --shadow-md: 0 8px 20px rgba(27, 33, 48, 0.10), 0 2px 6px rgba(27, 33, 48, 0.06);
+}
+
+body {
+  background-color: var(--color-canvas);
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-line-strong bg-surface px-3 py-2.5 text-sm text-fg placeholder:text-fg-subtle transition-colors duration-150;
+  }
+  .input:focus {
+    @apply border-ink-600 outline-none ring-2 ring-ink-100;
+  }
+  .input:disabled {
+    @apply cursor-not-allowed bg-well text-fg-subtle;
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in {
+    animation: fade-in 200ms ease-out;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+  .animate-shimmer {
+    background-image: linear-gradient(90deg, var(--color-well) 25%, var(--color-line) 37%, var(--color-well) 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .animate-shimmer,
+    .animate-spin {
+      animation: none;
+    }
+  }
+}
